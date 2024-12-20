@@ -5,22 +5,21 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 import plotly.graph_objects as go
 import plotly.express as px
+from PIL import Image
 
-# Model ve scaler'ları yükleme
+# Load model and scalers
 @st.cache_resource
 def load_model():
     try:
         model = joblib.load('BSA_model.pkl')
         return model
     except Exception as e:
-        st.error(f"Model yüklenirken hata oluştu: {e}")
+        st.error(f"Error loading model: {e}")
         return None
 
-
-
 def prepare_input_data(df):
-    """Veri ön işleme adımlarını gerçekleştirir"""
-    # Kategorik değişkenler için mapping
+    """Performs data preprocessing steps"""
+    # Mapping for categorical variables
     job_mapping = {
         'admin.': 0, 'blue-collar': 1, 'entrepreneur': 2, 'housemaid': 3,
         'management': 4, 'retired': 5, 'self-employed': 6, 'services': 7,
@@ -47,7 +46,7 @@ def prepare_input_data(df):
     day_mapping = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4}
     poutcome_mapping = {'failure': 0, 'nonexistent': 1, 'success': 2, 'unknown': 3}
 
-    # Kategorik değişkenleri dönüştür
+    # Convert categorical variables
     df['job'] = df['job'].map(job_mapping)
     df['marital'] = df['marital'].map(marital_mapping)
     df['education'] = df['education'].map(education_mapping)
@@ -59,12 +58,12 @@ def prepare_input_data(df):
     df['day_of_week'] = df['day_of_week'].map(day_mapping)
     df['poutcome'] = df['poutcome'].map(poutcome_mapping)
 
-    # Sayısal değişkenler için scaler
+    # Standardize numerical variables
     scaler = StandardScaler()
     numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp.var.rate',
                      'cons.price.idx', 'cons.conf.idx', 'euribor3m', 'nr.employed']
     
-    # Sayısal değişkenleri normalize et
+    # Normalize numerical variables
     df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
     
     return df
@@ -85,7 +84,7 @@ def show_model_details():
     
     # Model Information
     st.header('Model Information')
-    st.write("""
+    st.write(""" 
     - **Selected Model**: Random Forest Classifier
     - **Hyperparameters**:
         - max_depth: 20
@@ -93,31 +92,6 @@ def show_model_details():
         - min_samples_split: 2
         - n_estimators: 200
     """)
-    
-    # Confusion Matrix
-    st.header('Confusion Matrix')
-    confusion_matrix = [
-        [705, 29],
-        [0, 734]
-    ]
-    
-    fig_cm = go.Figure(data=go.Heatmap(
-        z=confusion_matrix,
-        x=['Predicted No', 'Predicted Yes'],
-        y=['Actual No', 'Actual Yes'],
-        text=confusion_matrix,
-        texttemplate="%{text}",
-        textfont={"size": 16},
-        colorscale='Viridis'
-    ))
-    
-    fig_cm.update_layout(
-        title='Confusion Matrix',
-        xaxis_title='Predicted Label',
-        yaxis_title='Actual Label'
-    )
-    
-    st.plotly_chart(fig_cm)
     
     # Model Comparison
     st.header('Model Comparison')
@@ -143,11 +117,55 @@ def show_model_details():
     fig_importance = px.bar(df_importance, x='Feature', y='Importance',
                           title='Top 5 Most Important Features')
     st.plotly_chart(fig_importance)
+    
+    # Confusion Matrix
+    st.header('Confusion Matrix')
+    confusion_matrix = [
+        [705, 29],
+        [0, 734]
+    ]
+    
+    fig_cm = go.Figure(data=go.Heatmap(
+        z=confusion_matrix,
+        x=['Predicted No', 'Predicted Yes'],
+        y=['Actual No', 'Actual Yes'],
+        text=confusion_matrix,
+        texttemplate="%{text}",
+        textfont={"size": 16},
+        colorscale='Viridis'
+    ))
+    
+    fig_cm.update_layout(
+        xaxis_title='Predicted Label',
+        yaxis_title='Actual Label'
+    )
+    
+    st.plotly_chart(fig_cm)
+
+    report_table = Image.open('report_table.jpg')
+    roc_curve = Image.open('roc_curve.png')
+    st.header('Analysis of Model')
+    st.image(report_table, use_container_width=True)
+    st.header('ROC Curve')
+    st.image(roc_curve, use_container_width=True)
 
 def main():
     st.sidebar.title('Navigation')
-    page = st.sidebar.radio('Go to', ['Prediction', 'Model Details'])
+    st.sidebar.markdown("""
+    **Choose your option below:**
+    """)
     
+    # Create buttons for navigation
+    prediction_button = st.sidebar.button('Prediction')
+    model_details_button = st.sidebar.button('Model Details')
+
+    if prediction_button:
+        page = 'Prediction'
+    elif model_details_button:
+        page = 'Model Details'
+    else:
+        page = 'Prediction'  # Default page
+
     if page == 'Prediction':
         st.title('Bank Marketing Prediction App')
         
@@ -157,47 +175,47 @@ def main():
             return
         
         # Input fields
-        st.subheader('Müşteri Bilgileri')
+        st.subheader('Customer Information')
         col1, col2 = st.columns(2)
         
         with col1:
-            age = st.number_input('Yaş', min_value=18, max_value=100, value=30)
-            job = st.selectbox('Meslek', options=['admin.', 'blue-collar', 'entrepreneur', 'housemaid', 
+            age = st.number_input('Age', min_value=18, max_value=100, value=30)
+            job = st.selectbox('Job', options=['admin.', 'blue-collar', 'entrepreneur', 'housemaid', 
                                                 'management', 'retired', 'self-employed', 'services', 
                                                 'student', 'technician', 'unemployed', 'unknown'])
-            marital = st.selectbox('Medeni Durum', options=['married', 'divorced', 'single'])
-            education = st.selectbox('Eğitim', options=['basic.4y', 'basic.6y', 'basic.9y', 'high.school',
+            marital = st.selectbox('Marital Status', options=['married', 'divorced', 'single'])
+            education = st.selectbox('Education', options=['basic.4y', 'basic.6y', 'basic.9y', 'high.school',
                                                       'illiterate', 'professional.course', 'university.degree', 
                                                       'unknown'])
-            default = st.selectbox('Kredi Temerrüdü', options=['no', 'yes'])
-            housing = st.selectbox('Konut Kredisi', options=['no', 'yes'])
-            loan = st.selectbox('Kişisel Kredi', options=['no', 'yes'])
+            default = st.selectbox('Credit Default', options=['no', 'yes'])
+            housing = st.selectbox('Housing Loan', options=['no', 'yes'])
+            loan = st.selectbox('Personal Loan', options=['no', 'yes'])
             
         with col2:
-            contact = st.selectbox('İletişim Türü', options=['cellular', 'telephone', 'unknown'])
-            month = st.selectbox('Ay', options=['jan', 'feb', 'mar', 'apr', 'may', 'jun',
-                                              'jul', 'aug', 'sep', 'oct', 'nov', 'dec'])
-            day_of_week = st.selectbox('Haftanın Günü', options=['mon', 'tue', 'wed', 'thu', 'fri'])
-            campaign = st.number_input('Kampanya İletişim Sayısı', min_value=1, max_value=50, value=1)
-            pdays = st.number_input('Son İletişimden Bu Yana Geçen Gün', min_value=0, value=0)
-            previous = st.number_input('Önceki Kampanya İletişim Sayısı', min_value=0, value=0)
-            poutcome = st.selectbox('Önceki Kampanya Sonucu', options=['failure', 'nonexistent', 'success', 'unknown'])
+            contact = st.selectbox('Contact Type', options=['cellular', 'telephone', 'unknown'])
+            month = st.selectbox('Month', options=['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+                                                  'jul', 'aug', 'sep', 'oct', 'nov', 'dec'])
+            day_of_week = st.selectbox('Day of the Week', options=['mon', 'tue', 'wed', 'thu', 'fri'])
+            campaign = st.number_input('Number of Campaign Contacts', min_value=1, max_value=50, value=1)
+            pdays = st.number_input('Days Since Last Contact', min_value=0, value=0)
+            previous = st.number_input('Previous Campaign Contacts', min_value=0, value=0)
+            poutcome = st.selectbox('Previous Campaign Outcome', options=['failure', 'nonexistent', 'success', 'unknown'])
         
-        st.subheader('Ekonomik Göstergeler')
+        st.subheader('Economic Indicators')
         col3, col4 = st.columns(2)
         
         with col3:
-            emp_var_rate = st.number_input('İstihdam Değişim Oranı', value=0.0, step=0.1)
-            cons_price_idx = st.number_input('Tüketici Fiyat Endeksi', value=93.2, step=0.1)
-            cons_conf_idx = st.number_input('Tüketici Güven Endeksi', value=-36.4, step=0.1)
+            emp_var_rate = st.number_input('Employment Variation Rate', value=0.0, step=0.1)
+            cons_price_idx = st.number_input('Consumer Price Index', value=93.2, step=0.1)
+            cons_conf_idx = st.number_input('Consumer Confidence Index', value=-36.4, step=0.1)
         
         with col4:
-            euribor3m = st.number_input('Euribor 3 Aylık Oran', value=4.857, step=0.001)
-            nr_employed = st.number_input('Çalışan Sayısı', value=5191.0, step=1.0)
+            euribor3m = st.number_input('Euribor 3 Month Rate', value=4.857, step=0.001)
+            nr_employed = st.number_input('Number of Employees', value=5191.0, step=1.0)
 
-        if st.button('Tahmin Et'):
+        if st.button('Predict'):
             try:
-                # Veriyi DataFrame'e dönüştür
+                # Convert data to DataFrame
                 input_data = pd.DataFrame({
                     'age': [age],
                     'job': [job],
@@ -220,26 +238,23 @@ def main():
                     'nr.employed': [nr_employed]
                 })
                 
-                # Veri ön işleme
-                processed_data = prepare_input_data(input_data)
+                # Preprocess data
+                input_data = prepare_input_data(input_data)
                 
-                # Tahmin
-                prediction = model.predict(processed_data)
-                probability = model.predict_proba(processed_data)
+                # Make prediction
+                prediction = model.predict(input_data)
+                probability = model.predict_proba(input_data)
                 
-                # Sonuçları göster
-                if prediction[0] == 1:
-                    st.success('Tahmin: Müşteri vadeli mevduat ürününü satın alma olasılığı YÜKSEK')
+                if prediction == 1:
+                    st.warning('Prediction: The customer is likely to purchase the term deposit product.')
                 else:
-                    st.error('Tahmin: Müşteri vadeli mevduat ürününü satın alma olasılığı DÜŞÜK')
-                    
-                st.write(f'Satın alma olasılığı: {probability[0][1]:.2%}')
+                    st.warning('Prediction: The customer is unlikely to purchase the term deposit product.')
                 
+                st.write(f"Probability of customer purchasing: {probability[0][1]*100:.2f}%")
             except Exception as e:
-                st.error(f"Tahmin yapılırken bir hata oluştu: {e}")
-    
-    else:  # Model Details page
+                st.error(f"Error during prediction: {e}")
+    elif page == 'Model Details':
         show_model_details()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
