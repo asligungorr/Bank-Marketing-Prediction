@@ -6,4 +6,4 @@ streamlit
 joblib
 sklearn
 plotly
-PIL
+Pillow
