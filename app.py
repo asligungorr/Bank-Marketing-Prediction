@@ -68,6 +68,19 @@ def prepare_input_data(df):
     
     return df
 
+def show_data_details():
+    st.title('Data Details and Analysis')
+    
+    st.write("The bank marketing dataset data is related with direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. Often, more than one contact to the same client was required, in order to access if the product (bank term deposit) would be ('yes') or not ('no') subscribed. The classification goal is to predict if the client will subscribe (yes/no) a term deposit (variable y).")
+    st.write("There is no null value.")
+    st.write("Link: https://archive.ics.uci.edu/ml/datasets/bank+marketing")
+
+    pie_chart = Image.open('pie_chart.png')
+    st.header('Pie Chart of dataset distribution')
+    st.write("The number of 'yes' asweres was 3368 and the number of 'no' values was 451. This means that dataset was unbalanced.")
+    st.image(pie_chart, use_container_width=True)
+
+
 def show_model_details():
     st.title('Model Details')
     
@@ -158,11 +171,14 @@ def main():
     # Create buttons for navigation
     prediction_button = st.sidebar.button('Prediction')
     model_details_button = st.sidebar.button('Model Details')
+    data_details_button = st.sidebar.button('Data Details')
 
     if prediction_button:
         page = 'Prediction'
     elif model_details_button:
         page = 'Model Details'
+    elif data_details_button:
+        page = 'Data Details'
     else:
         page = 'Prediction'  # Default page
 
@@ -255,6 +271,8 @@ def main():
                 st.error(f"Error during prediction: {e}")
     elif page == 'Model Details':
         show_model_details()
+    elif page == 'Data Details':
+        show_data_details()
 
 if __name__ == "__main__":
     main()
