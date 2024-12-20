@@ -16,40 +16,58 @@ def load_model():
         st.error(f"Model yüklenirken hata oluştu: {e}")
         return None
 
-@st.cache_resource
-def load_encoders_and_scaler():
-    try:
-        # Encoder ve scaler'ları yükle
-        encoders = joblib.load('label_encoders.pkl')
-        scaler = joblib.load('standard_scaler.pkl')
-        return encoders, scaler
-    except Exception as e:
-        st.error(f"Encoder ve scaler yüklenirken hata oluştu: {e}")
-        return None, None
 
-def prepare_input_data(input_data):
-    # Encoder ve scaler'ı yükle
-    encoders, scaler = load_encoders_and_scaler()
-    if encoders is None or scaler is None:
-        raise Exception("Encoder veya scaler yüklenemedi")
+
+def prepare_input_data(df):
+    """Veri ön işleme adımlarını gerçekleştirir"""
+    # Kategorik değişkenler için mapping
+    job_mapping = {
+        'admin.': 0, 'blue-collar': 1, 'entrepreneur': 2, 'housemaid': 3,
+        'management': 4, 'retired': 5, 'self-employed': 6, 'services': 7,
+        'student': 8, 'technician': 9, 'unemployed': 10, 'unknown': 11
+    }
     
+    marital_mapping = {'divorced': 0, 'married': 1, 'single': 2}
+    
+    education_mapping = {
+        'basic.4y': 0, 'basic.6y': 1, 'basic.9y': 2, 'high.school': 3,
+        'illiterate': 4, 'professional.course': 5, 'university.degree': 6, 'unknown': 7
+    }
+    
+    default_mapping = {'no': 0, 'yes': 1}
+    housing_mapping = {'no': 0, 'yes': 1}
+    loan_mapping = {'no': 0, 'yes': 1}
+    contact_mapping = {'cellular': 0, 'telephone': 1, 'unknown': 2}
+    
+    month_mapping = {
+        'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
+        'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+    }
+    
+    day_mapping = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4}
+    poutcome_mapping = {'failure': 0, 'nonexistent': 1, 'success': 2, 'unknown': 3}
+
     # Kategorik değişkenleri dönüştür
-    categorical_cols = ['job', 'marital', 'education', 'default', 'housing', 'loan', 
-                       'contact', 'month', 'day_of_week', 'poutcome']
-    
-    data_processed = input_data.copy()
-    
-    for col in categorical_cols:
-        if col in encoders:
-            data_processed[col] = encoders[col].transform(input_data[col])
-    
-    # Sayısal değişkenleri ölçeklendir
+    df['job'] = df['job'].map(job_mapping)
+    df['marital'] = df['marital'].map(marital_mapping)
+    df['education'] = df['education'].map(education_mapping)
+    df['default'] = df['default'].map(default_mapping)
+    df['housing'] = df['housing'].map(housing_mapping)
+    df['loan'] = df['loan'].map(loan_mapping)
+    df['contact'] = df['contact'].map(contact_mapping)
+    df['month'] = df['month'].map(month_mapping)
+    df['day_of_week'] = df['day_of_week'].map(day_mapping)
+    df['poutcome'] = df['poutcome'].map(poutcome_mapping)
+
+    # Sayısal değişkenler için scaler
+    scaler = StandardScaler()
     numerical_cols = ['age', 'campaign', 'pdays', 'previous', 'emp.var.rate',
                      'cons.price.idx', 'cons.conf.idx', 'euribor3m', 'nr.employed']
     
-    data_processed[numerical_cols] = scaler.transform(input_data[numerical_cols])
+    # Sayısal değişkenleri normalize et
+    df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
     
-    return data_processed
+    return df
 
 def show_model_details():
     st.title('Model Details')
