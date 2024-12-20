@@ -163,7 +163,7 @@ def show_model_details():
     st.image(roc_curve, use_container_width=True)
 
 def main():
-    st.sidebar.title('Navigation')
+    st.sidebar.title('Sidebar')
     st.sidebar.markdown("""
     **Choose your option below:**
     """)
