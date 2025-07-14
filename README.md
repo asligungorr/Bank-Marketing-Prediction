@@ -22,7 +22,8 @@ The dataset comes from a Portuguese bank’s direct marketing campaigns. The goa
 - joblib
 
 ## File Structure
-``` bank-marketing-prediction/
+``` bash
+ bank-marketing-prediction/
 ├── app.py # Streamlit web app for live predictions
 ├── project.ipynb # Jupyter notebook for EDA and model training
 ├── BSA_model.pkl # Trained Random Forest model (serialized)
