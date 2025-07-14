@@ -22,6 +22,7 @@ The dataset comes from a Portuguese bank’s direct marketing campaigns. The goa
 - joblib
 
 ## File Structure
+``` bank-marketing-prediction/
 ├── app.py # Main Streamlit app
 ├── project.ipynb # Notebook for model training & evaluation
 ├── BSA_model.pkl # Trained model
@@ -29,8 +30,8 @@ The dataset comes from a Portuguese bank’s direct marketing campaigns. The goa
 ├── requirements.txt # Dependencies
 ├── pie_chart.png # Class distribution
 ├── roc_curve.png # ROC curve
-└── report_table.jpg # Classification report
-
+└── report_table.jpg # Classification report 
+```
 ## Model Info
 
 - Model: Random Forest Classifier  
