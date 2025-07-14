@@ -42,10 +42,11 @@ The dataset comes from a Portuguese bank’s direct marketing campaigns. The goa
 
 All training steps are documented in the Jupyter notebook.
 
-## Setup & Run
+##  How to Run
 
 ```bash
-git clone <(https://github.com/asligungorr/Bank-Marketing-Prediction)>
-cd bank-prediction-app
+git clone https://github.com/asligungorr/Bank-Marketing-Prediction.git
+cd Bank-Marketing-Prediction
 pip install -r requirements.txt
 streamlit run app.py
+```
