@@ -1,32 +1,50 @@
 # Bank-Marketing-Prediction
-A machine learning-powered application to predict whether a customer will subscribe to a term deposit product, based on data from a Portuguese bank's marketing campaign.
+This is a machine learning project to predict whether a customer will subscribe to a term deposit, based on bank marketing data. The app is built with Streamlit and uses a trained Random Forest model under the hood.
 
-![App Screenshot](assets/roc_curve.png)
+## About the Project
 
----
+The dataset comes from a Portuguese bank’s direct marketing campaigns. The goal is to help identify potential customers before contacting them, improving campaign efficiency.
 
-## 📌 Overview
+## Features
 
-This project leverages a Random Forest Classifier to predict term deposit subscriptions based on various customer attributes and economic indicators. The application features an interactive interface built with Streamlit, detailed model performance visualizations with Plotly, and a robust data preprocessing pipeline.
+- Predicts subscription using real-time user input
+- Interactive UI built with Streamlit
+- Handles imbalanced data
+- Visualizes model performance (ROC curve, confusion matrix, feature importance)
 
----
+## Tech Stack
 
-## 🚀 Features
+- Python  
+- scikit-learn (RandomForestClassifier)  
+- Streamlit  
+- pandas, numpy  
+- Plotly  
+- joblib
 
-- 🔍 Predicts customer likelihood to subscribe to a term deposit
-- 📊 Real-time model predictions with probabilities
-- 📉 Handles imbalanced dataset with effective metrics
-- 📈 Visualizes model performance (ROC Curve, Confusion Matrix, Feature Importance)
-- 💡 Exploratory Data Analysis (EDA) for deeper insights
+## File Structure
+├── app.py # Main Streamlit app
+├── project.ipynb # Notebook for model training & evaluation
+├── BSA_model.pkl # Trained model
+├── bank-additional.csv # Dataset
+├── requirements.txt # Dependencies
+├── pie_chart.png # Class distribution
+├── roc_curve.png # ROC curve
+└── report_table.jpg # Classification report
 
----
+## Model Info
 
-## 🧠 Tech Stack
+- Model: Random Forest Classifier  
+- Accuracy: 98.02%  
+- F1-Score: 0.98  
+- AUC-ROC: 1.00  
+- Tuned using basic hyperparameter optimization
 
-- **Frontend/UI**: Streamlit  
-- **Machine Learning**: Scikit-learn (Random Forest Classifier)  
-- **Visualization**: Plotly, Matplotlib  
-- **Preprocessing**: pandas, NumPy, StandardScaler  
-- **Model Persistence**: joblib
+All training steps are documented in the Jupyter notebook.
 
----
+## Setup & Run
+
+```bash
+git clone <repo-link>
+cd bank-prediction-app
+pip install -r requirements.txt
+streamlit run app.py
