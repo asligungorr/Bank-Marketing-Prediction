@@ -45,7 +45,7 @@ All training steps are documented in the Jupyter notebook.
 ## Setup & Run
 
 ```bash
-git clone <[repo-link](https://github.com/asligungorr/Bank-Marketing-Prediction)>
+git clone <(https://github.com/asligungorr/Bank-Marketing-Prediction)>
 cd bank-prediction-app
 pip install -r requirements.txt
 streamlit run app.py
