@@ -23,14 +23,14 @@ The dataset comes from a Portuguese bank’s direct marketing campaigns. The goa
 
 ## File Structure
 ``` bank-marketing-prediction/
-├── app.py # Main Streamlit app
-├── project.ipynb # Notebook for model training & evaluation
-├── BSA_model.pkl # Trained model
-├── bank-additional.csv # Dataset
-├── requirements.txt # Dependencies
-├── pie_chart.png # Class distribution
-├── roc_curve.png # ROC curve
-└── report_table.jpg # Classification report 
+├── app.py # Streamlit web app for live predictions
+├── project.ipynb # Jupyter notebook for EDA and model training
+├── BSA_model.pkl # Trained Random Forest model (serialized)
+├── bank-additional.csv # Dataset used for training and evaluation
+├── requirements.txt # Python dependencies
+├── pie_chart.png # Class imbalance visualization (target variable)
+├── roc_curve.png # Model ROC curve
+└── report_table.jpg # Classification metrics (precision, recall, f1) 
 ```
 ## Model Info
 
@@ -45,7 +45,7 @@ All training steps are documented in the Jupyter notebook.
 ## Setup & Run
 
 ```bash
-git clone <repo-link>
+git clone <[repo-link](https://github.com/asligungorr/Bank-Marketing-Prediction)>
 cd bank-prediction-app
 pip install -r requirements.txt
 streamlit run app.py
