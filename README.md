@@ -79,8 +79,9 @@ cd Bank-Marketing-Prediction
 pip install -r requirements.txt
 
 # Launch the Streamlit app
-streamlit run app.py
-
+streamlit run app.py 
+```
+---
 ## 🌐 Live Deployment
 
 The application is currently deployed on **Streamlit Cloud**.  
