@@ -1,27 +1,39 @@
-# Bank-Marketing-Prediction
-This is a machine learning project to predict whether a customer will subscribe to a term deposit, based on bank marketing data. The app is built with Streamlit and uses a trained Random Forest model under the hood.
+# 🏦 Bank Marketing Prediction
 
-## About the Project
+## 📊 Project Overview
 
-The dataset comes from a Portuguese bank’s direct marketing campaigns. The goal is to help identify potential customers before contacting them, improving campaign efficiency.
+This project is a machine learning application designed to predict whether a bank customer will subscribe to a term deposit based on historical marketing data. Using a trained **Random Forest Classifier**, the application provides real-time predictions through an intuitive **Streamlit** interface.
 
-## Features
+The primary objective is to assist marketing teams in improving campaign efficiency by identifying likely responders before initiating contact.
 
-- Predicts subscription using real-time user input
-- Interactive UI built with Streamlit
-- Handles imbalanced data
-- Visualizes model performance (ROC curve, confusion matrix, feature importance)
+---
 
-## Tech Stack
+## 🚀 Key Features
 
-- Python  
-- scikit-learn (RandomForestClassifier)  
-- Streamlit  
-- pandas, numpy  
-- Plotly  
-- joblib
+- 🔮 **Live Prediction Interface** – Input customer details and receive instant predictions  
+- 📈 **Model Performance Visualization** – Includes ROC curve, confusion matrix, and feature importance  
+- ⚖️ **Class Imbalance Handling** – Uses techniques to manage skewed target classes  
+- 🧠 **Trained ML Model** – Implements a Random Forest model with optimized hyperparameters  
+- 🧪 **Reproducible Workflow** – All data processing and model training steps are documented
 
-## File Structure
+---
+
+## 🧰 Tech Stack
+
+| Layer        | Tools & Libraries                     |
+|--------------|----------------------------------------|
+| ML Model     | `scikit-learn` (RandomForestClassifier) |
+| Web UI       | `Streamlit`                            |
+| Data Handling| `pandas`, `numpy`                      |
+| Visualization| `Plotly`, `matplotlib`, `seaborn`      |
+| Serialization| `joblib`                               |
+| Language     | `Python`                               |
+
+---
+
+## 🗂️ File Structure
+
+
 ``` bash
 bank-marketing-prediction/
 ├── app.py # Streamlit web app for live predictions
@@ -33,21 +45,43 @@ bank-marketing-prediction/
 ├── roc_curve.png # Model ROC curve
 └── report_table.jpg # Classification metrics (precision, recall, f1) 
 ```
-## Model Info
+## 📁 Dataset Description
 
-- Model: Random Forest Classifier  
-- Accuracy: 98.02%  
-- F1-Score: 0.98  
-- AUC-ROC: 1.00  
-- Tuned using basic hyperparameter optimization
+- **Source**: UCI Machine Learning Repository  
+- **Size**: 41,188 records, 21 features  
+- **Target Variable**: `y` – whether the client subscribed to a term deposit (`yes` / `no`)  
+- **Type**: Tabular, classification  
 
-All training steps are documented in the Jupyter notebook.
+---
 
-##  How to Run
+## 📊 Model Summary
+
+- **Algorithm**: Random Forest Classifier  
+- **Accuracy**: 98.02%  
+- **F1 Score**: 0.98  
+- **AUC-ROC**: 1.00  
+- **Optimization**: Grid search & manual tuning  
+
+All model training, evaluation, and validation steps are fully documented in the Jupyter notebook.
+
+---
+
+## ▶️ How to Run the App
 
 ```bash
+# Clone the repository
 git clone https://github.com/asligungorr/Bank-Marketing-Prediction.git
+
+# Navigate into the project directory
 cd Bank-Marketing-Prediction
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Launch the Streamlit app
 streamlit run app.py
-```
+
+## 🌐 Live Deployment
+
+The application is currently deployed on **Streamlit Cloud**.  
+If you would like to access the live demo, the deployment link can be provided upon request.
